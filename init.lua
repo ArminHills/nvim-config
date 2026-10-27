@@ -156,7 +156,7 @@ do
   --   See `:help lua-options`
   --   and `:help lua-guide-options`
   vim.o.list = true
-  vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+  vim.opt.listchars = { tab = '| ', trail = '·', nbsp = '␣' }
 
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
@@ -733,6 +733,7 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
+    ts_ls = {},
     -- clangd = {},
     -- gopls = {},
     -- pyright = {},
@@ -803,10 +804,13 @@ do
   -- You can press `g?` for help in this menu.
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
-    -- You can add other tools here that you want Mason to install
+    "stylua",
+    "rust-analyzer",
+    "typescript-language-server"
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
 
   for name, server in pairs(servers) do
     vim.lsp.config(name, server)
@@ -911,14 +915,25 @@ do
     completion = {
       -- By default, you may press `<c-space>` to show the documentation.
       -- Optionally, set `auto_show = true` to show the documentation after a delay.
-      documentation = { auto_show = false, auto_show_delay_ms = 500 },
+      documentation = { auto_show =true, auto_show_delay_ms = 300 },
+      list = {
+        selection = {
+          preselect = false,
+          auto_insert = true
+        },
+      },
+      menu = {draw = {columns = {
+        { "label", "label_description", gap = 1 },
+        { "kind_icon", "kind" },
+      }}}
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets' },
+      default = { 'lsp', 'path', 'snippets', 'buffer', },
     },
 
     snippets = { preset = 'luasnip' },
+
 
     -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
     -- which automatically downloads a prebuilt binary when enabled.
@@ -1035,6 +1050,10 @@ do
   -- require 'custom.plugins.ui'
   -- require 'custom.plugins.git'
 end
+
+vim.lsp.config("*", {
+  capabilities = require("blink.cmp").get_lsp_capabilities(),
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vpluginsim: ts=2 sts=2 sw=2 et
