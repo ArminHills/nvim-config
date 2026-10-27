@@ -1,15 +1,14 @@
-return
-{
-	'saghen/blink.cmp',
-	dependencies = {
-		'rafamadriz/friendly-snippets',
-        {
-            "L3MON4D3/LuaSnip",
-            version = "v2.*",
-            build = "make install_jsregexp"
-        }
-	},
-	version = '1.*',
+return {
+  'saghen/blink.cmp',
+  dependencies = {
+    'rafamadriz/friendly-snippets',
+    {
+      'L3MON4D3/LuaSnip',
+      version = 'v2.*',
+      build = 'make install_jsregexp',
+    },
+  },
+  version = '1.*',
 
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
@@ -22,7 +21,7 @@ return
     keymap = { preset = 'default' },
 
     appearance = {
-      nerd_font_variant = 'normal' --mono/normal
+      nerd_font_variant = 'normal', --mono/normal
     },
     signature = { enabled = true },
 
@@ -41,7 +40,7 @@ return
     -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
     --
     -- See the fuzzy documentation for more information
-    fuzzy = { implementation = "prefer_rust_with_warning" }
+    fuzzy = { implementation = 'prefer_rust_with_warning' },
   },
-  opts_extend = { "sources.default" }
+  opts_extend = { 'sources.default' },
 }
